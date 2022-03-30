@@ -1,26 +1,54 @@
-def move(t1,t2):
-    #todo
-    #make so given theta 1 & 2 it goes there
-    return
+import kinematics
+#import stepperMove
 
-def readG(string):
-    #todo
-    #given Gcode string output desired needed theta 1&2
-    #we ignoring G01 vs G02 vs G03, ALL ASSUMED FAST INTERPOLATION
-    return
 
-def stepperMove(theta):
-    #if i need, given some theta moves moter to there
-    #might be redundant
-    #good place to copypasta
-    #could split into move motre 1 and 2 as seperate functions, keep pins sep
+gCode = []
+with open("C:/Users/pitts/Documents/GitHub/ENGI301/PlotterProj/gcodeTest.txt") as f:
+    gCode = f.readlines()
 
-    return
+#------------------------------adddddd ZERO THING FROM STEPPER MOVE
+xPos = 0
+yPos = 0
+zPos = 0
+th1 = 0
+th2 = 0
 
-#might need if statement for the pen conrotl, sum like "IF Z<0 then pen down"
+for G in gCode:             #all units always mm, IGNORE G21, ONLY CARE MOVEMENT G0#
+    xPrev = xPos
+    yPrev = yPos
+    zPrev = zPos
 
-#main void gon go like
+    if (G[0] == 'G' and G[1] == '0'):
+        G = G.replace(" ","")
+        moveType = G[2]
+        xInd = G.find('X')
+        yInd = G.find('Y')
+        zInd = G.find('Z')
+        fInd = G.find('F')
+        iInd = G.find('I')
+        
+        end = max(fInd,iInd)
 
-#read file
-#loop : read line, move
-#repeat till done
+        xPos = xPrev
+        yPos = yPrev
+        zPos = zPrev
+        if (xInd>0):
+            xPos = G[(xInd+1):(yInd)]
+            yPos = G[(yInd+1):(zInd)]
+        
+        if (zInd>0):
+            zPos = G[(zInd+1):end]
+        
+        #------------------ NOW HAVE xPos yPos zPos and moveType
+        #move type can be 0,1,2,3 FOR NOW IGNORING 123, ALL linear interp
+        if (zPos<0):
+            #add servo mvmnt
+            print("servo down")
+        
+        #add movetype differentation
+        thDes = kinematics.ik(xPos,yPos)
+        #m1(curr,desireed,somespd)
+        th1 = kinematics.deg2step(thDes[0])*1.8
+        th2 = kinematics.deg2step(thDes[1])*1.8
+        
+

@@ -3,6 +3,7 @@ from turtle import end_fill
 
 l1 = 1
 l2 = 1
+bing = 325
 
 def fk(t1,t2):              #theta1 is joint 1, theta 2 is joint 2 wrt joint1 CURRENTLY IN DEG
     th1 = t1*math.pi/180
@@ -28,4 +29,7 @@ def ik(x,y):
     
     return(out)
 
-print(ik(1,1))
+def deg2step(th):
+    out = th/1.8
+    out = abs(round(out))
+    return(bing)
