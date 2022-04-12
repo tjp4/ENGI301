@@ -44,7 +44,7 @@ for G in gCode:             #all units always mm, IGNORE G21, ONLY CARE MOVEMENT
         #------------------ NOW HAVE xPos yPos zPos and moveType
         #move type can be 0,1,2,3 FOR NOW IGNORING 123, ALL linear interp
         
-        pen(zPos) #servo up/down
+        stepperMove.pen(zPos) #servo up/down
         
         #add movetype differentation
         if (moveType==0):
